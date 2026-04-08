@@ -415,11 +415,8 @@ func (h *ChatHandler) HandleMessages() {
 	}
 }
 
-// Рассылка сообщений всем клиентам
+// Рассылка сообщений всем клиентам (вызывается из горутины HandleMessages — без лока)
 func (h *ChatHandler) broadcast(msg models.Message) {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
 	payload := map[string]interface{}{
 		"type":        "message",
 		"id":          msg.ID,
@@ -432,13 +429,19 @@ func (h *ChatHandler) broadcast(msg models.Message) {
 		"room_id":     msg.RoomID,
 	}
 
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	var dead []*websocket.Conn
 	for client := range h.clients {
-		err := client.WriteJSON(payload)
-		if err != nil {
+		if err := client.WriteJSON(payload); err != nil {
 			log.Printf("Ошибка отправки сообщения: %v", err)
 			client.Close()
-			delete(h.clients, client)
+			dead = append(dead, client)
 		}
+	}
+	for _, c := range dead {
+		delete(h.clients, c)
 	}
 }
 
@@ -491,11 +494,9 @@ func (h *ChatHandler) sendUserList(roomID int) {
 			continue
 		}
 		inRoom, err := h.DB.IsUserInRoom(roomID, uid)
-		if err != nil {
+		if err != nil || !inRoom {
 			continue
 		}
-		if inRoom {
-			client.WriteJSON(payload)
-		}
+		client.WriteJSON(payload)
 	}
 }

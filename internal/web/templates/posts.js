@@ -1,90 +1,65 @@
-const postsList = document.getElementById("posts-list");
-const createPostBtn = document.getElementById("create-post-btn");
-const postForm = document.getElementById("post-form");
-const cancelPostBtn = document.getElementById("cancel-post-btn");
-const sortSelect = document.getElementById("sort-select");
-const clearBtn = document.getElementById("clear-sort-btn");
+const postsList    = document.getElementById("posts-list");
+const createPostBtn= document.getElementById("create-post-btn");
+const postForm     = document.getElementById("post-form");
+const cancelPostBtn= document.getElementById("cancel-post-btn");
+const sortSelect   = document.getElementById("sort-select");
+const clearBtn     = document.getElementById("clear-sort-btn");
 
-// создаём кнопку "Наверх"
+// кнопка "Наверх"
 const scrollTopBtn = document.createElement("button");
 scrollTopBtn.id = "scroll-top-btn";
 scrollTopBtn.textContent = "⬆ Наверх";
 document.body.appendChild(scrollTopBtn);
 
-// находим контейнер доски
 const board = document.querySelector(".posts-board");
-
 let suppressScrollTopBtn = false;
 
-// следим за прокруткой именно доски
 if (board) {
   board.addEventListener("scroll", () => {
-    if (!suppressScrollTopBtn && board.scrollTop > 300) {
-      scrollTopBtn.style.display = "block";
-    } else {
-      scrollTopBtn.style.display = "none";
-    }
+    scrollTopBtn.style.display = (!suppressScrollTopBtn && board.scrollTop > 300) ? "block" : "none";
   });
-
-  // при клике прокручиваем доску вверх
-  scrollTopBtn.addEventListener("click", () => {
-    board.scrollTo({ top: 0, behavior: "smooth" });
-  });
+  scrollTopBtn.addEventListener("click", () => board.scrollTo({ top: 0, behavior: "smooth" }));
 }
 
-// глобальная переменная для запоминания источника вызова формы
 let formOrigin = null;
 
-// универсальная функция обновления UI
 function updateAuthUI() {
-  if (document.body.dataset.isauth === "true") {
-    createPostBtn.style.display = "inline-block";
-  } else {
-    createPostBtn.style.display = "none";
+  if (createPostBtn) {
+    createPostBtn.style.display = document.body.dataset.isauth === "true" ? "inline-block" : "none";
   }
 }
-
-// вызов при загрузке
 updateAuthUI();
 
 if (sortSelect && clearBtn) {
   sortSelect.addEventListener("change", async () => {
     const value = sortSelect.value;
-
     if (value === "mine") {
       const response = await fetch("/posts", { credentials: "include" });
       let posts = await response.json();
       const myUserId = document.body.dataset.userid;
-      posts = posts.filter(p => p.user_id == myUserId);
-      renderPosts(posts);
+      renderPosts(posts.filter(p => p.user_id == myUserId));
     } else {
       let url = "/posts";
       if (value === "rating_desc") url += "?sort=rating_desc";
-      if (value === "rating_asc") url += "?sort=rating_asc";
+      if (value === "rating_asc")  url += "?sort=rating_asc";
       const response = await fetch(url, { credentials: "include" });
-      const posts = await response.json();
-      renderPosts(posts);
+      renderPosts(await response.json());
     }
-
     clearBtn.style.display = value ? "inline-block" : "none";
   });
 
   clearBtn.addEventListener("click", async () => {
     sortSelect.value = "";
     clearBtn.style.display = "none";
-    const response = await fetch("/posts", { credentials: "include" });
-    const posts = await response.json();
-    renderPosts(posts);
+    renderPosts(await (await fetch("/posts", { credentials: "include" })).json());
   });
 }
 
-// загрузка постов
 async function loadPosts() {
   try {
     const response = await fetch("/posts", { credentials: "include" });
     if (!response.ok) throw new Error("Ошибка загрузки постов");
-    const posts = await response.json();
-    renderPosts(posts);
+    renderPosts(await response.json());
   } catch (err) {
     console.error(err);
     postsList.innerHTML = "<p>Не удалось загрузить посты</p>";
@@ -101,7 +76,6 @@ function renderPosts(posts) {
     if (post.categories && post.categories.length > 0) {
       categoriesHtml = `<p class="categories">Категории: ${post.categories.join(", ")}</p>`;
     }
-
     let tagsHtml = "";
     if (post.tags && post.tags.length > 0) {
       tagsHtml = `<p class="tags">Теги: ${post.tags.join(", ")}</p>`;
@@ -116,30 +90,23 @@ function renderPosts(posts) {
         Автор: ${post.username || "?"}, 
         Рейтинг: ${post.rating || 0}, 
         👍 ${post.likes || 0}, 👎 ${post.dislikes || 0}
-      </p>
-      `;
+      </p>`;
 
-    if (document.body.dataset.isauth === "true" &&
-        document.body.dataset.userid == post.user_id) {
+    if (document.body.dataset.isauth === "true" && document.body.dataset.userid == post.user_id) {
       html += `
         <button class="edit-post-btn" data-id="${post.id}">Редактировать</button>
-        <button class="delete-post-btn" data-id="${post.id}">Удалить</button>
-      `;
+        <button class="delete-post-btn" data-id="${post.id}">Удалить</button>`;
     }
 
     html += `
       <button class="vote-btn" data-id="${post.id}" data-value="1">👍</button>
-      <button class="vote-btn" data-id="${post.id}" data-value="-1">👎</button>
-    `;
+      <button class="vote-btn" data-id="${post.id}" data-value="-1">👎</button>`;
 
     div.innerHTML = html;
 
     div.addEventListener("click", async function() {
       const response = await fetch(`/posts?posts-id=${post.id}`, { credentials: "include" });
-      if (response.ok) {
-        const fullPost = await response.json();
-        renderSinglePost(fullPost);
-      }
+      if (response.ok) renderSinglePost(await response.json());
     });
 
     postsList.appendChild(div);
@@ -148,83 +115,113 @@ function renderPosts(posts) {
   document.querySelectorAll(".vote-btn").forEach(function(btn) {
     btn.addEventListener("click", async function(e) {
       e.stopPropagation();
-      const postID = btn.dataset.id;
-      const value = btn.dataset.value;
       await fetch("/vote", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ post_id: postID, value }),
+        body: new URLSearchParams({ post_id: btn.dataset.id, value: btn.dataset.value }),
         credentials: "include"
       });
       await loadPosts();
     });
   });
 
-  document.querySelectorAll(".edit-post-btn").forEach(function(btn) {
-    btn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      openEditForm(btn.dataset.id);
-    });
+  document.querySelectorAll(".edit-post-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) { e.stopPropagation(); openEditForm(btn.dataset.id); });
   });
-  document.querySelectorAll(".delete-post-btn").forEach(function(btn) {
-    btn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      deletePost(btn.dataset.id);
-    });
+  document.querySelectorAll(".delete-post-btn").forEach(btn => {
+    btn.addEventListener("click", function(e) { e.stopPropagation(); deletePost(btn.dataset.id); });
   });
 }
 
 if (createPostBtn) {
   createPostBtn.addEventListener("click", function() {
-    formOrigin = "create"; // запомнили, что форма вызвана для создания
+    formOrigin = "create";
     postForm.style.display = "block";
     postForm.reset();
     document.getElementById("post-id").value = "";
-
-    // временно отключаем кнопку "Наверх"
     suppressScrollTopBtn = true;
     postForm.scrollIntoView({ behavior: "smooth", block: "start" });
     setTimeout(() => suppressScrollTopBtn = false, 1000);
   });
 }
 
-if (cancelPostBtn) {
-  console.log("Cancel button found, adding listener");
-  cancelPostBtn.addEventListener("click", function() {
-    console.log("Cancel clicked, formOrigin:", formOrigin);
+// ── ГЛАВНЫЙ ФИКС: перехватываем submit, отправляем через fetch ──────────────
+if (postForm) {
+  postForm.addEventListener("submit", async function(e) {
+    e.preventDefault(); // не даём форме перезагрузить страницу
 
-    if (formOrigin === "create") {
-      const board = document.querySelector(".posts-board");
-      if (board) {
-        console.log("Scrolling posts-board to top");
-        board.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    } else if (formOrigin) {
-      const postElement = document.querySelector(`.edit-post-btn[data-id="${formOrigin}"]`);
-      if (postElement) {
-        console.log("Scrolling back to post", formOrigin);
-        postElement.closest(".post-item")
-                   .scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+    const postId  = document.getElementById("post-id").value;
+    const title   = document.getElementById("post-title").value.trim();
+    const content = document.getElementById("post-content").value.trim();
+
+    if (!title || !content) {
+      showToast("Заполните заголовок и содержание", "error");
+      return;
     }
 
-    // закрываем форму и сбрасываем состояние чуть позже
+    const categoriesSelect = document.getElementById("categories");
+    const selectedCategories = Array.from(categoriesSelect.selectedOptions).map(o => o.value);
+
+    if (selectedCategories.length === 0) {
+      showToast("Выберите хотя бы одну категорию", "error");
+      return;
+    }
+
+    const body = new URLSearchParams({ title, content });
+    selectedCategories.forEach(c => body.append("categories", c));
+
+    const isEdit = postId !== "";
+    if (isEdit) body.append("id", postId);
+
+    const url = isEdit ? "/edit-post" : "/create-post";
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+        credentials: "include"
+      });
+
+      if (response.ok) {
+        showToast(isEdit ? "Пост обновлён!" : "Пост создан!", "success");
+        postForm.style.display = "none";
+        postForm.reset();
+        formOrigin = null;
+        await loadPosts();
+      } else {
+        const text = await response.text();
+        showToast("Ошибка: " + text, "error");
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Ошибка соединения с сервером", "error");
+    }
+  });
+}
+
+if (cancelPostBtn) {
+  cancelPostBtn.addEventListener("click", function() {
+    if (formOrigin === "create") {
+      if (board) board.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (formOrigin) {
+      const postElement = document.querySelector(`.edit-post-btn[data-id="${formOrigin}"]`);
+      if (postElement) postElement.closest(".post-item").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     setTimeout(() => {
       postForm.style.display = "none";
       formOrigin = null;
-    }, 500); // задержка 300 мс
+    }, 500);
   });
-} else {
-  console.log("Cancel button NOT found");
 }
 
 function openEditForm(postID) {
   fetch(`/posts?posts-id=${postID}`, { credentials: "include" })
     .then(res => res.json())
     .then(post => {
-      formOrigin = post.id; // запомнили id поста
+      formOrigin = post.id;
       postForm.style.display = "block";
-      document.getElementById("post-id").value = post.id;
+      document.getElementById("post-id").value    = post.id;
       document.getElementById("post-title").value = post.title;
       document.getElementById("post-content").value = post.content;
 
@@ -236,10 +233,9 @@ function openEditForm(postID) {
         postCategories = post.categories.split(",").map(s => s.trim());
       }
       for (let option of categoriesSelect.options) {
-        option.selected = postCategories.includes(option.text);
+        option.selected = postCategories.includes(option.text) || postCategories.includes(option.value);
       }
 
-      // временно отключаем кнопку "Наверх"
       suppressScrollTopBtn = true;
       setTimeout(() => {
         postForm.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -258,17 +254,17 @@ async function deletePost(postID) {
       credentials: "include"
     });
     if (response.ok) {
+      showToast("Пост удалён", "success");
       await loadPosts();
     } else {
-      alert("Ошибка удаления поста");
+      showToast("Ошибка удаления поста", "error");
     }
   } catch (err) {
     console.error(err);
-    alert("Ошибка соединения с сервером");
+    showToast("Ошибка соединения с сервером", "error");
   }
 }
 
-// начальный рендер
 loadPosts();
 
 if (sortSelect) {

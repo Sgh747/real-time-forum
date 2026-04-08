@@ -189,3 +189,33 @@ label[for="sort-select"] {
   transform: scale(1.05);
   box-shadow: 0 0 10px #d4af37;
 }
+
+/* ── ФИКС: длинный текст не выходит за рамку карточки ── */
+.post-item {
+  overflow: hidden; /* последний рубеж */
+}
+
+.post-item h3,
+.post-item p,
+.post-item .categories,
+.post-item .tags,
+.post-item .meta {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* ── ФИКС 2: убираем pre-wrap с мета-строки, оставляем только перенос слов ── */
+.post-item p,
+.post-item .categories,
+.post-item .tags,
+.post-item .meta {
+  white-space: normal;
+}
+
+.post-item .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 8px;
+  align-items: center;
+}

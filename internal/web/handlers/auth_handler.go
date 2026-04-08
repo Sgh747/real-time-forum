@@ -193,6 +193,13 @@ func (h *AuthHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Проверка: хотя бы одна категория обязательна
+	selectedRaw := r.Form["categories"]
+	if len(selectedRaw) == 0 {
+		http.Error(w, "Выберите хотя бы одну категорию", http.StatusBadRequest)
+		return
+	}
+
 	forumService := service.ForumService{DB: h.DB}
 	postID, err := forumService.CreatePost(userID, title, contentStr)
 	if err != nil {
