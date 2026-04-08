@@ -142,8 +142,10 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
-  min-width: 0; /* ФИКС 3 */
+  min-width: 0;
   max-width: 100%;
+  /* FIX: аватарка остаётся прибита к верху даже при длинном сообщении */
+  align-self: stretch;
 }
 .chat-message-mine .chat-message-body { align-items: flex-end; }
 
@@ -161,8 +163,8 @@
   display: block;
   font-size: 14px;
   line-height: 1.55;
-  color: #e8e0d4;
-  background: rgba(255,255,255,0.08);
+  color: #1a1a1a; /* FIX: чёрный текст */
+  background: rgba(255,255,255,0.82);
   border-radius: 8px;
   padding: 6px 11px;
 
@@ -170,17 +172,18 @@
   overflow-wrap: break-word;
   white-space: pre-wrap;
 
-  /* длинное сообщение скроллится само, не ломая layout */
   max-height: 280px;
   overflow-y: auto;
 }
 .chat-message-mine .chat-text {
-  background: rgba(88,101,242,0.22);
+  background: rgba(200,210,255,0.9);
+  color: #1a1a1a;
 }
 
 .chat-time {
   font-size: 10px;
-  color: #888;
+  color: #ffffff;
+  font-weight: bold;
   padding: 0 2px;
 }
 
@@ -355,3 +358,34 @@
   transition: background 0.15s;
 }
 .chat-create-btn:hover { background: rgba(88,101,242,0.45); }
+
+/* ── ФИНАЛЬНЫЕ ФИКСЫ ─────────────────────────────────────────── */
+
+/* Текст сообщения — всегда тёмный, читаемый */
+.chat-text {
+  color: #1a1a1a !important;
+  background: rgba(255,255,255,0.82) !important;
+}
+.chat-message-mine .chat-text {
+  background: rgba(200,210,255,0.88) !important;
+  color: #1a1a1a !important;
+}
+
+/* Никнейм над сообщением — тоже видимый */
+.chat-username {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  /* цвет задаётся через JS */
+}
+
+/* Аватарка не съезжает при длинном сообщении */
+.chat-message {
+  align-items: flex-start !important;
+}
+.chat-avatar {
+  align-self: flex-start !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px;
+}
