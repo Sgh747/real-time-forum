@@ -1,0 +1,191 @@
+/* Основная модалка постов */
+.posts-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 2000;
+  font-family: 'MedievalSharp', cursive;
+  display: flex;              /* включаем flex */
+  align-items: stretch;       /* растягиваем по высоте */
+  justify-content: stretch;   /* растягиваем по ширине */
+}
+
+/* Контейнер доски объявлений */
+.posts-board {
+  background: url('/static/parallaximg/textures/Copilot_posts_texture1.png') repeat;
+  background-size: cover;     /* растягиваем текстуру */
+  border: none;               /* можно убрать рамку, если нужен чистый фон */
+  width: 100%;                /* на всю ширину */
+  height: 100%;               /* на всю высоту */
+  padding: 2rem;
+  box-sizing: border-box;     /* чтобы padding не ломал размеры */
+  overflow-y: auto;           /* прокрутка, если постов много */
+  position: relative;
+}
+
+/* Заголовок доски */
+.posts-board h2 {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2rem;
+  color: #d4af37; /* золотистый */
+  text-shadow: 2px 2px 6px #000;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Элементы постов */
+.post-item {
+  background: url('/static/parallaximg/textures/Copilot_paper_texture3.png');
+  background-repeat: no-repeat;   /* отключаем повтор */
+  background-size: cover;         /* растягиваем текстуру на весь блок */
+  background-position: center;    /* центрируем картинку */
+  
+  border: 2px solid #8b5a2b;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+}
+
+.post-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #5a3a1a;
+  margin-bottom: 0.5rem;
+}
+
+.post-content {
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #2c1a0f;
+}
+
+/* Кнопка добавления поста */
+.posts-create-btn {
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  color: #f5e6c4;
+  font-family: 'Cinzel', serif;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.posts-create-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #d4af37;
+}
+
+/* Форма поста */
+.post-form {
+  background: rgba(255, 248, 220, 0.9);
+  border: 2px solid #8b5a2b;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.post-form input[type="text"],
+.post-form textarea,
+.post-form select {
+  width: 100%;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem;
+  border: 1px solid #8b5a2b;
+  border-radius: 6px;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.post-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.form-actions button {
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  color: #f5e6c4;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.form-actions button:hover {
+  background: linear-gradient(#d4af37, #8b5a2b);
+}
+
+/* Элементы постов */
+.post-item {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  border: 2px solid #8b5a2b;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.4);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  color: #000000;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 0px 0px 0px #000000;
+  padding-left: 3%;
+  font-style: italic;
+}
+
+.post-item h3 {
+  margin-bottom: 0.5rem; /* отступ вниз от заголовка */
+  font-style: normal;
+  font-weight: bold;
+}
+
+.post-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border-color: #d4af37; /* золотистая подсветка при наведении */
+}
+
+/* Стиль для надписи "Сортировка по:" */
+label[for="sort-select"] {
+  font-family: 'Uncial Antiqua', serif;
+  margin-bottom: 1rem;
+  color: #f4edca;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* Кнопка "Наверх" */
+#scroll-top-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  color: #f5e6c4;
+  font-family: 'Cinzel', serif;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  z-index: 3000; /* выше чем модалка и доска */
+  display: none; /* по умолчанию скрыта */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#scroll-top-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #d4af37;
+}

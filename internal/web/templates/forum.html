@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+     <!-- Шрифты и стили -->
+    <link rel="icon" type="image/png" href="/static/creditsimg/favicon.png">
+
+    <meta charset="UTF-8">
+    <title>Real‑Time Forum</title>
+
+    <!-- Шрифты и стили -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/static/forumStyle.css">
+    <link rel="stylesheet" href="/static/toastAlerts.css">
+    <link rel="stylesheet" href="/static/parallaxStyle.css">
+    <link rel="stylesheet" href="/static/overlay.css">
+    <link rel="stylesheet" href="/static/modals.css">
+    <link rel="stylesheet" href="/static/posts.css">
+    <link rel="stylesheet" href="/static/postsingle.css">
+    <link rel="stylesheet" href="/static/chat.css">
+    <link rel="stylesheet" href="/static/credits.css">
+</head>
+
+<body class="forum"
+      data-isauth="{{.IsAuth}}"
+      data-username="{{.Username}}"
+      data-userid="{{.UserID}}">
+
+    <!-- Хэдер -->
+    <nav id="navbar" class="global-header">
+    <div>
+        <a href="#" class="nav-link" data-scroll="view-home">Главная</a>
+        <a href="#" class="nav-link" data-scroll="posts-block">Посты</a>
+        <a href="#" class="nav-link" data-scroll="chat-block">Чат</a>
+
+        {{if .IsAuth}}
+        <button id="logout-btn" class="nav-link">Выход ({{.Username}})</button>
+        {{else}}
+        <a href="#" class="nav-link" data-scroll="register-block-guest">Регистрация</a>
+        <a href="#" class="nav-link" data-scroll="login-block-guest">Вход</a>
+        {{end}}
+    </div>
+    </nav>
+
+    <main>
+        <!-- Диорама -->
+        <section id="view-home" class="view diorama">
+            <div class="parallax">
+                <div class="layer bg"></div>
+                <div class="layer mid"></div>
+                <div class="layer fg"></div>
+                <div class="auth-layout">
+                    <div class="auth-card">
+                        <img src="/static/parallaximg/logo/logo1.png" alt="Real time forum" class="forum-logo">
+                        <p class="welcome-text">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Порядок параллакс-блоков -->
+        <!-- Городские ворота (гость, ещё не регистрировался) -->
+        <section id="register-block-guest" class="parallax-block register-block-guest">
+        <div class="content-area">
+            <h2>Городские ворота</h2>
+            <p>Городская стража требует регистрационные бумаги для пропуска в город. Если у Вас уже есть регистрационные бумаги, вы можете подойти к страже и показать их, чтобы Вас пропустили в город.</p>
+            <button class="open-modal" data-target="view-register">Регистрация</button>
+            <button class="nav-link" data-scroll="login-block-guest">Подойти к страже</button>
+        </div>
+        </section>
+
+        <!-- Городские ворота (зарегистрирован, но не вошёл) -->
+        <section id="register-block-registered" class="parallax-block register-block-registered hidden">
+        <div class="content-area">
+            <h2>Регистрационные бумаги получены</h2>
+            <p>Вы уже получили регистрационные бумаги. Осталось показать их страже, чтобы войти в город. 
+            Если вы пришли с друзьями, вы можете зарегистрировать их тоже.</p>
+            <button class="open-modal" data-target="view-register">Зарегистрировать других</button>
+            <button class="nav-link" data-scroll="login-block-guest">Показать документы страже</button>
+        </div>
+        </section>
+
+        <!-- Вход в город (гость, ещё не вошёл) -->
+        <section id="login-block-guest" class="parallax-block login-block-guest hidden">
+        <div class="content-area">
+            <h2>Вход в город</h2>
+            <p>Имея регистрацию, можно войти в город, показав регистрационные бумаги страже.</p>
+            <button class="open-modal" data-target="view-login">Показать регистрационные бумаги</button>
+        </div>
+        </section>
+
+<!-- Вход в город (авторизованный) -->
+<section id="login-block-user" class="parallax-block login-block-user hidden">
+  <div class="content-area">
+    <h2>Добро пожаловать в город!</h2>
+
+    <h3>Главная площадь</h3>
+    <p>
+      Проход в крепостной стене Златолесья оказался порталом: один шаг под сводами тяжелых ворот — и лесная прохлада сменилась удушливым восторгом живого города. Едва вековой лес остался за спиной, перед вами предстала, залитая предзакатным солнцем, раскинулась Главная площадь. Мостовая, выложенная отполированным до блеска базальтом, хранила тепло уходящего дня. Воздух здесь был плотным и живым: аромат свежего хлеба из пекарни переплетался с дурманящей горечью сушеных трав, а порывы ветра то и дело приносили из квартала мастеров резкий, суровый запах окалины и серы.
+    </p>
+
+    <p>
+      Город дышал в унисон с сотнями голосов. Над толпой, балансируя на шаткой пирамиде из пустых ящиков, надрывался котенок-газетчик. В своей мешковатой рубахе и штанах на подтяжках он казался совсем крохотным, но его звонкий голос перекрывал даже гул авантюристов, яростно деливших контракт у доски объявлений. А над всей этой суетой, пронзая облака, возвышались недосягаемые шпили замка Мастерхолд.
+    </p>
+
+    <p>
+      Там, в небесных чертогах, восседают мастера древней магии. Раз в год они покидают свои покои, чтобы показать жителям сказочные представления: о битве с драконом под горой, в чертогах которого было несметное количество золота, о кольце, поглотившем тьму в самом сердце вулкана, и о беловолосом страннике, чей меч и сердце были связаны узами предназначения с фиалковыми глазами чародейки.
+    </p>
+
+    <button class="nav-link" data-scroll="posts-block">Перейти к постам</button>
+  </div>
+</section>
+
+
+        <section id="posts-block" class="parallax-block block1">
+            <div class="content-area">
+                <h2>Доска объявлений</h2>
+                <p>Это место — не просто доска, а перекресток слухов и правды. Здесь можно прочесть о пропавших вещах, о просьбах о помощи, о странных происшествиях, что тревожат жителей. Нацарапанные заметки, аккуратно написанные свитки и торопливые записи на клочках бумаги складываются в мозаику недавней истории. Кто-то ищет друга, кто-то предупреждает о опасности, а кто-то оставляет подсказку для путников.</p>
+                <button class="open-modal" data-target="view-posts">Перейти к постам</button>
+            </div>
+        </section>
+
+        <section id="chat-block" class="parallax-block block2">
+            <div class="content-area">
+                <h2>Таверна</h2>
+                <p>Здесь собираются участники форума для общения.</p>
+                <button class="open-modal" data-target="view-chat">Войти в таверну</button>
+            </div>
+        </section>
+
+        <!-- Городские ворота (авторизованный, вошёл) -->
+        <section id="register-block-logged-in" class="parallax-block register-block-logged-in hidden">
+        <div class="content-area">
+            <h2>Выйти из города</h2>
+            <p>Для регистрации гостей вам необходимо выйти за городские ворота и сдать регистрационные бумаги.</p>
+            <button id="logout-btn" class="nav-link logout-btn-custom">Выйти из города</button>
+        </div>
+        </section>
+
+        <!-- Параллакс-блок титров -->
+        <section id="credits-block" class="parallax-block block3">
+        <div class="credits-container">
+            <img src="/static/parallaximg/logo/credits1.png" alt="Real time forum" class="forum-logo">
+            <button class="open-modal" data-target="view-credits">Нажмите для просмотра титров</button>
+        </div>
+        </section>
+
+        <!-- Модалка титров -->
+        <section id="view-credits" class="view modal credits-modal" style="display:none;">
+            <div class="credits-slideshow">
+                <div class="credits-slide active">
+                    <img src="/static/creditsimg/Copilot_титры1.png" alt="directedby">
+                </div>
+                <div class="credits-slide">
+                    <img src="/static/creditsimg/Copilot_титры2.png" alt="storyby">
+                </div>
+                <div class="credits-slide">
+                    <img src="/static/creditsimg/Copilot_титры3.png" alt="designby">
+                </div>
+                <div class="credits-slide">
+                    <img src="/static/creditsimg/Copilot_титры4.png" alt="cast">
+                </div>
+                <div class="credits-slide">
+                    <img src="/static/creditsimg/Copilot_титры5.png" alt="thankyou">
+                </div>
+            </div>
+
+            <!-- аудио внутри модалки -->
+            <audio id="credits-audio" src="/static/soundtrack/pixabay-kaazoom-shadows-beneath-the-roots.mp3" loop></audio>
+
+            <!-- кнопка назад -->
+            <button class="modal-back-btn">← Назад</button>
+        </section>
+
+        <!-- Модальные окна -->
+        <!-- Посты -->
+        <section id="view-posts" class="view modal posts-modal">
+            <div class="posts-board">
+            <div class="posts-header">
+                <button class="modal-back-btn">← Назад</button>
+                <h2>Доска объявлений</h2>
+                <button id="create-post-btn" class="posts-create-btn" style="display:none;">Создать пост</button>
+            </div>
+
+            <!-- 🔽 Блок сортировки -->
+            <div class="posts-sort">
+            <label for="sort-select">Сортировка по:</label>
+            <select id="sort-select">
+                <option value="">—</option>
+                <option value="mine">Мои посты</option>
+                <option value="rating_desc">Высокий рейтинг</option>
+                <option value="rating_asc">Низкий рейтинг</option>
+            </select>
+            <button id="clear-sort-btn" style="display:none;">Удалить сортировку</button>
+            </div>
+
+            <!-- Список постов -->
+            <div id="posts-list"></div>
+
+            <!-- Форма создания/редактирования поста -->
+            <form id="post-form" method="post" action="/create-post" style="display:none;" class="post-form">
+            <input type="hidden" name="id" id="post-id">
+            <input type="text" name="title" id="post-title" placeholder="Заголовок">
+            <textarea name="content" id="post-content" placeholder="Содержание"></textarea>
+
+            <!-- Категории -->
+            <label for="categories">Категории:</label>
+            <select name="categories" id="categories" multiple>
+                {{range .Categories}}
+                <option value="{{.ID}}">{{.Name}}</option>
+                {{end}}
+            </select>
+
+            <div class="form-actions">
+                <button type="submit">Сохранить</button>
+                <button type="button" id="cancel-post-btn">Отмена</button>
+            </div>
+            </form>
+        </div>
+        </section>
+
+        <!-- Модалка отдельного поста -->
+        <section id="post-modal" class="view modal posts-modal" style="display:none;">
+        <div class="post-modal">
+            <div class="post-modal-header">
+            <button class="modal-back-btn">← Назад</button>
+            <h3 id="modal-title"></h3>
+            </div>
+            <div id="modal-content" class="post-modal-body"></div>
+        </div>
+        </section>
+
+        <!-- Модалка приглашения -->
+        <section id="view-invite" class="view modal invite-modal" style="display:none;">
+        <div class="modal-container">
+            <h2>Приглашение в приватный чат</h2>
+            <p id="invite-text"></p>
+            <div class="invite-actions">
+            <button id="invite-accept">Да</button>
+            <button id="invite-decline">Нет</button>
+            </div>
+        </div>
+        </section>
+
+        <!-- Чат -->
+        <section id="view-chat" class="view modal chat-modal">
+        <div class="chat-layout">
+
+            <!-- Кнопка назад -->
+             <button class="modal-back-btn">← Назад</button>
+
+            <!-- Левая панель: каналы -->
+            <aside class="chat-channels">
+            <h3>Каналы</h3>
+            <ul id="public-channels">
+                <li class="active" data-room="1"># общий-чат</li>
+            </ul>
+
+            <h3>Мои приватные чаты</h3>
+            <ul id="private-channels"></ul>
+            <button id="create-room-btn" class="chat-create-btn">Создать приватный чат</button>
+            </aside>
+
+            <!-- Центральная часть: сообщения -->
+            <main class="chat-main">
+            <header class="chat-header" id="chat-header"># общий-чат</header>
+            <div id="chat-box" class="chat-box"></div>
+            <div id="typing-indicator" class="typing-indicator"></div>
+            <div class="chat-input-area">
+                <input id="chat-input" type="text" placeholder="Введите сообщение..." />
+                <button id="chat-send-btn">Отправить</button>
+            </div>
+            </main>
+
+            <!-- Правая панель: список участников -->
+            <aside class="chat-users">
+            <h3>Участники</h3>
+            <input id="user-search" type="text" placeholder="Поиск по никнейму..." />
+            <ul id="user-list" class="user-list"></ul>
+            </aside>
+        </div>
+        </section>
+
+        <!-- Личные сообщения -->
+        <section id="view-dm" class="view modal dm-modal">
+        <div class="modal-container">
+            <button class="modal-back-btn">← Назад</button>
+            <h2>Личные сообщения</h2>
+            <div id="dm-box" class="chat-box"></div>
+            <div id="dm-typing-indicator" class="typing-indicator"></div>
+            <div class="chat-input-area">
+            <input id="dm-input" type="text" placeholder="Введите сообщение..." />
+            <button id="dm-send-btn">Отправить</button>
+            </div>
+        </div>
+        </section>
+
+        <!-- Вход -->
+        <section id="view-login" class="view modal login-modal">
+        <div class="modal-container">
+            <button class="modal-back-btn">← Назад</button>
+            <h2>Вход</h2>
+            <form id="login-form" method="post" action="/login">
+            <input type="email" name="email" placeholder="Email">
+            <input type="password" name="password" placeholder="Пароль">
+            <button type="submit">Войти</button>
+            </form>
+        </div>
+        </section>
+
+        <!-- Регистрация -->
+        <section id="view-register" class="view modal register-modal">
+        <div class="modal-container">
+            <button class="modal-back-btn">← Назад</button>
+            <h2>Регистрация</h2>
+            <form id="register-form" method="post" action="/register">
+            <input type="text" name="first_name" placeholder="Имя">
+            <input type="text" name="last_name" placeholder="Фамилия">
+            <input type="number" name="age" placeholder="Возраст">
+            <select name="gender">
+                <option value="male">Мужской</option>
+                <option value="female">Женский</option>
+                <option value="other">Другое</option>
+            </select>
+            <input type="text" name="username" placeholder="Никнейм">
+            <input type="email" name="email" placeholder="Email">
+            <input type="password" name="password" placeholder="Пароль">
+            <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+        </section>
+    </main>
+
+    <!-- Подключение JS -->
+    <script src="/templates/router.js"></script>
+    <script src="/templates/chat.js"></script>
+    <script src="/templates/posts.js"></script>
+    <script src="/templates/postsingle.js"></script>
+    <script src="/templates/auth.js"></script>
+    <script src="/templates/updateUI.js"></script>
+    <script src="/templates/toastAlerts.js"></script>
+    <script src="/static/overlay.js"></script>
+    <script src="/static/disappearance.js"></script>
+    <script src="/templates/credits.js"></script>
+</body>
+</html>

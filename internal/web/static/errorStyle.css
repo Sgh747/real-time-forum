@@ -1,0 +1,102 @@
+/* ====== Общие стили ====== */
+body.error-bg {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    color: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+/* Overlay для затемнения */
+body.error-bg .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: -1;
+}
+
+/* ====== Контейнер ошибки ====== */
+.error-container {
+    width: 420px;
+    padding: 40px;
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+    text-align: center;
+    animation: fadeIn 0.6s ease-out;
+    z-index: 1;
+}
+
+/* ====== Заголовок ====== */
+.error-container h1 {
+    font-size: 32px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+/* ====== Текст ошибки ====== */
+.error-container p {
+    font-size: 17px;
+    opacity: 0.85;
+    margin-bottom: 28px;
+    line-height: 1.5;
+}
+
+/* ====== Кнопка "Назад" ====== */
+.back-btn {
+    display: inline-block;
+    padding: 12px 26px;
+    border-radius: 10px;
+
+    background: linear-gradient(135deg, #4b6bff, #6f4bff);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 18px rgba(80, 90, 255, 0.35);
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(80, 90, 255, 0.55);
+}
+
+/* ====== Анимация появления ====== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ====== Индивидуальные фоны ====== */
+body.error-400 {
+    background: url("/static/errorBackgrounds/Copilot_400.png") center/cover no-repeat;
+}
+body.error-403 {
+    background: url("/static/errorBackgrounds/Copilot_403.png") center/cover no-repeat;
+}
+body.error-404 {
+    background: url("/static/errorBackgrounds/Copilot_404.png") center/cover no-repeat;
+}
+body.error-500 {
+    background: url("/static/errorBackgrounds/Copilot_500.png") center/cover no-repeat;
+}

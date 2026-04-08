@@ -1,0 +1,165 @@
+/* ================================
+   Выпадающий список для создания постов
+   ================================ */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 420px;
+}
+
+.dropdown-btn {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: rgba(255,255,255,0.8); /* светлый фон */
+    color: #000; /* чёрный текст */
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+.dropdown-btn:hover {
+    background: rgba(255,255,255,0.95);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    margin-top: 6px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1000;
+    background: rgba(255,255,255,0.95); /* светлый фон */
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+}
+
+.dropdown-menu.open {
+    display: block;
+}
+
+.dropdown-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    color: #000; /* чёрный текст */
+    user-select: none;
+}
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: rgba(0,0,0,0.05);
+    outline: none;
+}
+
+/* ================================
+   Выпадающий список для сортировки постов на странице с постами
+   ================================ */
+
+.posts-filter {
+    display: flex;
+    align-items: center;   /* выравнивание по вертикали */
+    gap: 10px;             /* расстояние между label и select */
+    margin: 16px 0;
+}
+
+.posts-filter label {
+    font-weight: 600;
+    color: #fff;           /* или твой цвет */
+}
+
+.glass-select {
+    flex: 1;               /* селект растягивается */
+    max-width: 320px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(0,0,0,0.03);
+    font: inherit;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+.glass-select:hover {
+    background: rgba(0, 0, 0, 0.070);
+    outline: none;
+}
+.glass-select:focus {
+    background: rgba(0,0,0,0.05);
+    outline: none;
+}
+.glass-select option {
+    background: #ffffff;
+    color: #fff;
+}
+
+/* Контейнер для select + чипов */
+.categories-wrapper {
+  width: 100%;
+  max-width: 420px;
+  margin-top: 8px;
+}
+
+/* Множественный select: делаем его компактным, но удобным для выбора */
+#categories {
+  width: 100%;
+  min-height: 44px;
+  max-height: 160px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.983);
+  background: rgb(255, 255, 255);
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Внешний вид опций (в некоторых браузерах может игнорироваться) */
+#categories option {
+  padding: 6px 8px;
+}
+
+/* Контейнер для визуальных "чипов" выбранных категорий */
+.selected-chips {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Стили чипа */
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.9);
+  color: #111;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* Кнопка удаления внутри чипа */
+.chip-remove {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0 4px;
+  color: #666;
+}
+
+/* Небольшая адаптация для мобильных: увеличим кликабельную область */
+@media (max-width: 480px) {
+  #categories { min-height: 56px; }
+  .category-chip { padding: 8px 12px; font-size: 1rem; }
+}
+
+.visually-hidden { position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }

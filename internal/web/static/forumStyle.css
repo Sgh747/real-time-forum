@@ -1,0 +1,151 @@
+/* ================================
+   ГЛОБАЛЬНЫЙ ФОН
+   ================================ */
+body.forum {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #142b3d, #0b1014);
+    color: #111;
+}
+
+/* ================================
+   HEADER (Fantasy RPG Style)
+   ================================ */
+.global-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 70px;
+    background: linear-gradient(to bottom, #2b1d0e, #1a1208); /* тёмный кожаный/деревянный фон */
+    border-bottom: 4px solid #d4af37; /* золотая окантовка */
+    color: #f5f0d7; /* светлый пергаментный цвет */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 1.5rem;
+    z-index: 1000;
+    font-family: "Cinzel Decorative", serif; /* декоративный фэнтези-шрифт */
+}
+
+/* Ссылки навбара */
+.global-header .nav-link {
+    color: #f5f0d7;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.global-header .nav-link:hover {
+    color: #d4af37; /* золотой при наведении */
+    text-shadow: 0 0 6px #d4af37;
+}
+
+/* Кнопка выхода */
+#logout-btn {
+    background: none;
+    border: 2px solid #d4af37;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#logout-btn:hover {
+    background: #d4af37;
+    color: #1a1208;
+}
+
+/* ================================
+   Logo (Real time forum)
+   ================================ */
+.forum-logo {
+  height: 110px;
+  width: auto;
+  position: absolute;
+  top: 230px;   /* отступ сверху */
+  left: 100px;  /* отступ слева */
+}
+
+/* ================================
+   LAYOUT (только для главной и параллакса)
+   ================================ */
+.layout-container,
+.auth-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+}
+
+/* ================================
+   POSTS + COMMENTS
+   ================================ */
+.post-card,
+.comment-box {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.2s;
+}
+
+.post-card:hover {
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* ================================
+   CHAT
+   ================================ */
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.chat-box div { 
+    margin-bottom: 6px; 
+    font-size: 0.95rem; 
+}
+
+#chat-input,
+button,
+.neo-btn {
+    font-size: 15px;
+    font-weight: 600;
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+#chat-input {
+    width: 70%;
+    border: 1px solid #ddd;
+}
+
+#chat-send-btn {
+    margin-left: 8px;
+    background: #ff3c78;
+    color: #fff;
+    cursor: pointer;
+}
+
+#chat-send-btn:hover,
+button:hover {
+    background: #d42a60;
+}
+
+button {
+    background: #142b3d;
+    color: #fff;
+    cursor: pointer;
+}

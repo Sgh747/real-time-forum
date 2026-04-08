@@ -1,0 +1,174 @@
+/* Общие стили модалок */
+.view.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 2000;
+  align-items: flex-start;   /* контент сверху */
+  justify-content: flex-start; /* контент слева */
+  background-size: cover;
+  background-position: center;
+}
+
+/* Фоны для модалок регистрации и логина */
+.login-modal {
+  background-image: url('/static/parallaximg/Copilot_login3.png');
+}
+.register-modal {
+  background-image: url('/static/parallaximg/Copilot_registration.png');
+}
+
+/* Контейнер для контента */
+.modal-container,
+.view.modal .auth-card,
+.view.modal .content-area {
+  position: relative;
+  padding: 4rem;
+  max-width: 500px;
+  border: 6px solid #4b2e1e; /* дерево/металл */
+  border-radius: 12px;
+  margin: 2rem;
+  box-shadow: 0 0 25px rgba(0,0,0,0.7), inset 0 0 10px rgba(255,255,200,0.3);
+  color: #2c1a0f;
+  text-align: left;
+  z-index: 2100;
+}
+
+#view-invite {
+  position: fixed;       /* фиксируем относительно окна */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6); /* затемнение фона */
+  display: none;         /* скрыта по умолчанию */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;         /* поверх всех остальных */
+}
+
+#view-invite .modal-container {
+  background: url('/static/parallaximg/textures/Copilot_paper_texture3.png');
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Заголовки */
+.view.modal h2 {
+  font-family: 'Uncial Antiqua', serif;
+  margin-bottom: 1rem;
+  color: #f4edca;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 40px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* Инпуты и селекты */
+.view.modal input,
+.view.modal select {
+  display: block;
+  width: 85%;
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 2px solid #4b2e1e;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #2c1a0f;
+  background: rgba(255,255,255,0.9);
+}
+
+/* Кнопки */
+.view.modal button {
+  background: linear-gradient(#6b4226, #3a2414);
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  color: #f5e6c4;
+  font-family: 'Cinzel', serif;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.view.modal button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #d4af37;
+}
+
+/* Кнопка "Назад" */
+.modal-back-btn {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #d4af37;
+  text-shadow: 1px 1px 4px #000;
+  transition: color 0.3s;
+}
+
+.modal-back-btn:hover {
+  color: #fff;
+}
+
+/* Контейнер для заголовка и кнопок */
+.posts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+/* Заголовок по центру */
+.posts-header h2 {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+}
+
+/* Кнопка назад слева */
+.posts-header .modal-back-btn {
+  position: static; /* убираем absolute */
+  margin-right: auto;
+}
+
+/* Кнопка создать пост справа */
+.posts-header .posts-create-btn {
+  margin-left: auto;
+}
+
+/* Кнопка Назад */
+#view-credits .modal-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 20; /* поверх слайдов */
+}
+
+/* Картинки титров не должны блокировать клики */
+.credits-slide img {
+  pointer-events: none;
+}
+
+/* Кнопка аудио всегда кликабельна */
+#view-credits #toggle-audio-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(#6b4226, #3a2414);
+  border: 2px solid #d4af37;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #f5e6c4;
+  text-shadow: 1px 1px 4px #000;
+  transition: color 0.3s;
+  z-index: 99999; /* поверх всего */
+  font-family: 'Cinzel', serif;
+  pointer-events: auto; /* явно разрешаем клики */
+}

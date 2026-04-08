@@ -1,0 +1,45 @@
+#view-credits {
+  position: relative;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  height: 100vh;
+  width: 100vw; /* ширина на весь экран */
+}
+
+.credits-slideshow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.credits-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  display: flex;              /* контейнер */
+  justify-content: center;    /* центрируем содержимое */
+  align-items: center;
+}
+
+.credits-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* заполняет экран, обрезая лишнее */
+  /* если нужно без обрезки — поставь contain */
+}
+
+.credits-slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+#view-credits .modal-back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10; /* выше картинок */
+}

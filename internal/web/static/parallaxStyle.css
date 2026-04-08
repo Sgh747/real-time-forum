@@ -1,0 +1,201 @@
+/* Диорама заменена на один фон */
+.parallax {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* убираем скролл */
+  background: url('/static/parallaximg/Copilot_fantasycastle1.png') no-repeat center center;
+  background-size: cover;
+}
+
+/* Классические параллакс-блоки */
+.parallax-block {
+  position: relative; /* чтобы дочерние элементы могли позиционироваться */
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  display: flex;
+  align-items: center;   /* вертикально по центру */
+  justify-content: center; /* горизонтально по центру */
+}
+
+/* ================================
+   Городские ворота (гость, ещё не регистрировался)
+   ================================ */
+.register-block-guest {
+  background-image: url('/static/parallaximg/Copilot_city_gate1.png');
+}
+.register-block-guest .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* ================================
+   Городские ворота (зарегистрирован, но не вошёл)
+   ================================ */
+.register-block-registered {
+  background-image: url('/static/parallaximg/Copilot_city_gate2.png');
+}
+.register-block-registered .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* ================================
+   Городские ворота (авторизованный, вошёл)
+   ================================ */
+.register-block-logged-in {
+  background-image: url('/static/parallaximg/Copilot_city_logout1.png');
+}
+.register-block-logged-in .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+.register-block-logged-in .content-area #logout-btn {
+  background-color: #b33a3a;   /* красный фон */
+  color: #fff;
+  border: 2px solid #8a2c2c;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-block-logged-in .content-area #logout-btn:hover {
+  background-color: #d94c4c;
+}
+
+/* ================================
+   Вход в город (гость, ещё не вошёл)
+   ================================ */
+.login-block-guest {
+  background-image: url('/static/parallaximg/Copilot_city_gate5.png');
+}
+.login-block-guest .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* ================================
+   Вход в город (авторизованный)
+   ================================ */
+.login-block-user {
+  background-image: url('/static/parallaximg/Copilot_city3.png');
+}
+.login-block-user .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+}
+
+/* ================================
+   Параллакс для страницы доски объявлений
+   ================================ */
+.block1 {
+  background-image: url('/static/parallaximg/Copilot_board_outside3.png');
+}
+.block1 .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+} 
+
+/* ================================
+   Параллакс для страницы таверны(чат)
+   ================================ */
+.block2 {
+  background-image: url('/static/parallaximg/Copilot_tavern_outside1.png');
+}
+.block2 .content-area {
+  background: linear-gradient(to bottom, #2b1d0ed3, #1a120887);
+  border-bottom: 1.4px solid #dab776;
+  color: #f5f0d7;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 20px;
+  text-shadow: 1px 1px 2px #000000;
+  font-weight: bold;
+} 
+
+/* ================================
+   Параллакс для страницы титров
+   ================================ */
+.block3 {
+  background-image: url('/static/parallaximg/Copilot_титры1.png');
+}
+.credits-container {
+  position: absolute;
+  top: 350px;   /* как у лого */
+  display: flex;
+  flex-direction: column; /* элементы идут вертикально */
+  align-items: center;    /* по центру друг под другом */
+}
+
+.credits-container .forum-logo {
+  position: static; /* убираем абсолютное позиционирование внутри контейнера */
+  height: 110px;
+}
+
+.credits-container button {
+  margin-top: 15px; /* отступ под логотипом */
+}
+
+
+
+/* Контент внутри параллакс-блоков */
+.content-area {
+  background: rgba(255,255,255,0.85);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* ================================
+   Универсальный класс скрытия
+   ================================ */
+.hidden {
+  display: none !important;
+}
+
+/* Базовое состояние */
+.content-area {
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+/* При наведении — полностью проявляем */
+.content-area.hover-active {
+  opacity: 1 !important;
+}
