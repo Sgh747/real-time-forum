@@ -115,8 +115,9 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// для GET или других методов — рендерим HTML
-	h.RenderError(w, r, http.StatusMethodNotAllowed, "Ошибка 405", "Метод не поддерживается")
+	// GET — просто рендерим страницу (форма в forum.html)
+	data := h.MakeLayoutData(r, nil, "Регистрация", "")
+	utils.RenderTemplate(w, data, "forum.html")
 }
 
 // ✅ Логин
@@ -152,8 +153,9 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// для GET или других методов — рендерим HTML
-	h.RenderError(w, r, http.StatusMethodNotAllowed, "Ошибка 405", "Метод не поддерживается")
+	// GET — рендерим страницу
+	data := h.MakeLayoutData(r, nil, "Вход", "")
+	utils.RenderTemplate(w, data, "forum.html")
 }
 
 // ✅ Показ поста
@@ -207,16 +209,15 @@ func (h *AuthHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// категории из формы
-	selected := r.Form["categories"]
+	// категории (selectedRaw уже проверен выше)
 	var categoryIDs []int
-	for _, idStr := range selected {
+	for _, idStr := range selectedRaw {
 		if id, err := strconv.Atoi(idStr); err == nil {
 			categoryIDs = append(categoryIDs, id)
 		}
 	}
-	if len(categoryIDs) > 0 {
-		_ = forumService.AddPostCategories(postID, categoryIDs)
+	if err := forumService.AddPostCategories(postID, categoryIDs); err != nil {
+		log.Printf("Ошибка добавления категорий: %v", err)
 	}
 
 	// Возвращаем JSON с новым постом
@@ -256,16 +257,24 @@ func (h *AuthHandler) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	post.Title = strings.TrimSpace(r.FormValue("title"))
 	post.Content = strings.TrimSpace(r.FormValue("content"))
 
-	// категории приходят как "1,2,3"
-	catStr := r.FormValue("categories")
+	// категории приходят как повторяющиеся поля: categories=1&categories=2
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Ошибка разбора формы", http.StatusBadRequest)
+		return
+	}
 	var categoryIDs []int
-	for _, s := range strings.Split(catStr, ",") {
+	for _, s := range r.Form["categories"] {
 		s = strings.TrimSpace(s)
 		if s == "" {
 			continue
 		}
-		id, _ := strconv.Atoi(s)
-		categoryIDs = append(categoryIDs, id)
+		if id, err := strconv.Atoi(s); err == nil {
+			categoryIDs = append(categoryIDs, id)
+		}
+	}
+	if len(categoryIDs) == 0 {
+		http.Error(w, "Выберите хотя бы одну категорию", http.StatusBadRequest)
+		return
 	}
 
 	// обновляем сам пост
@@ -275,14 +284,14 @@ func (h *AuthHandler) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// обновляем категории
-	if len(categoryIDs) > 0 {
-		if err := h.DB.UpdatePostCategories(post.ID, categoryIDs); err != nil {
-			http.Error(w, "Ошибка обновления категорий", http.StatusInternalServerError)
-			return
-		}
+	if err := h.DB.UpdatePostCategories(post.ID, categoryIDs); err != nil {
+		http.Error(w, "Ошибка обновления категорий", http.StatusInternalServerError)
+		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{"success": true})
 }
 
 func (h *AuthHandler) DeletePost(w http.ResponseWriter, r *http.Request) {
@@ -397,6 +406,10 @@ func (h *AuthHandler) VoteComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Ошибка разбора формы", http.StatusBadRequest)
+		return
+	}
 	commentID, _ := strconv.Atoi(r.FormValue("comment_id"))
 	value, _ := strconv.Atoi(r.FormValue("value"))
 
@@ -424,5 +437,11 @@ func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
 	var username string
 	_ = h.DB.Conn.QueryRow(`SELECT username FROM users WHERE id = ?`, userID).Scan(&username)
 
-	writeJSONSuccessWithUser(w, "/me", username, userID)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"success":      true,
+		"username":     username,
+		"userId":       userID,
+		"isRegistered": true,
+	})
 }

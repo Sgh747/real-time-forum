@@ -129,13 +129,8 @@ func (h *AuthHandler) Vote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Редирект
-	redirect := r.FormValue("redirect")
-	if redirect == "" {
-		redirect = r.Referer()
-	}
-	if !isLocalRedirect(redirect) {
-		redirect = "/login#posts"
-	}
-	http.Redirect(w, r, redirect, http.StatusSeeOther)
+	// БАГ ФИКС: фронт использует fetch и ждёт JSON, а не redirect
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"success":true}`))
 }
