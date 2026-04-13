@@ -30,29 +30,67 @@ function updateUI() {
   }
 
   // Параллакс‑блоки
-  const regGuest = document.getElementById("register-block-guest");
+  const regGuest    = document.getElementById("register-block-guest");
   const regRegistered = document.getElementById("register-block-registered");
   const regLoggedIn = document.getElementById("register-block-logged-in");
-  const loginGuest = document.getElementById("login-block-guest");
-  const loginUser = document.getElementById("login-block-user");
+  const loginGuest  = document.getElementById("login-block-guest");
+  const loginUser   = document.getElementById("login-block-user");
 
   if (regGuest && regRegistered && regLoggedIn) {
-    // Логика для "Городские ворота"
     regGuest.classList.toggle("hidden", isRegistered || isAuth);
     regRegistered.classList.toggle("hidden", !isRegistered || isAuth);
     regLoggedIn.classList.toggle("hidden", !isAuth);
   }
 
   if (loginGuest && loginUser) {
-    // Логика для "Вход в город"
     loginGuest.classList.toggle("hidden", isAuth);
     loginUser.classList.toggle("hidden", !isAuth);
   }
+
+  // ФИКС: подсвечиваем активную ссылку в навбаре
+  highlightActiveNav();
 }
+
+// Подсвечивает кнопку "Главная" когда пользователь наверху страницы
+function highlightActiveNav() {
+  const links = document.querySelectorAll(".nav-link[data-scroll]");
+
+  // Определяем текущую секцию через IntersectionObserver или scrollY
+  const sections = [
+    "view-home", "register-block-guest", "register-block-registered",
+    "login-block-guest", "login-block-user", "register-block-logged-in",
+    "posts-block", "chat-block", "credits-block"
+  ];
+
+  // Снимаем active со всех
+  links.forEach(l => l.classList.remove("nav-active"));
+
+  // Находим какая секция сейчас в зоне видимости
+  let activeSection = null;
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.top <= window.innerHeight / 2 && rect.bottom >= 0) {
+      activeSection = id;
+      break;
+    }
+  }
+
+  // Подсвечиваем нужную ссылку
+  links.forEach(link => {
+    if (link.dataset.scroll === activeSection) {
+      link.classList.add("nav-active");
+    }
+  });
+}
+
+// Обновляем активную ссылку при прокрутке
+window.addEventListener("scroll", highlightActiveNav, { passive: true });
 
 // подтягиваем состояние при первой загрузке
 document.addEventListener("DOMContentLoaded", async () => {
-  await syncAuthState(); // сначала проверяем авторизацию
+  await syncAuthState();
   updateUI();
   updateAuthUI();
   if (!location.hash || (document.body.dataset.isauth === "true" && location.hash === "#login")) {
@@ -65,8 +103,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 window.addEventListener("hashchange", async () => {
   await syncAuthState();
   updateUI();
-  updateAuthUI();       // снова обновляем UI при смене состояния
-  await loadPosts();     // перерисовываем посты, чтобы кнопки появились
+  updateAuthUI();
+  await loadPosts();
 });
 
 // плавный скролл по data-scroll

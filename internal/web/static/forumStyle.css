@@ -149,3 +149,11 @@ button {
     color: #fff;
     cursor: pointer;
 }
+
+/* ── Активная ссылка навбара — подсветка текущей секции ────────── */
+.global-header .nav-link.nav-active {
+  color: #d4af37;
+  text-shadow: 0 0 8px #d4af37, 0 0 16px rgba(212,175,55,0.4);
+  border-bottom: 2px solid #d4af37;
+  padding-bottom: 6px;
+}

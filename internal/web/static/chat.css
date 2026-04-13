@@ -103,7 +103,7 @@
 /* ── ФИКС 1 + ФИКС 3: Пузырь сообщения ──────────────────────── */
 .chat-message {
   display: flex;
-  align-items: flex-start;
+  align-items: flex-start; /* аватарка и тело прибиты к верху */
   gap: 10px;
   padding: 4px 6px;
   border-radius: 8px;
@@ -113,9 +113,9 @@
 }
 .chat-message:hover { background: rgba(255,255,255,0.04); }
 
-/* Своё сообщение — справа */
+/* Своё сообщение — справа, аватарка справа */
 .chat-message-mine {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse; /* порядок: body → avatar (avatar оказывается справа) */
   align-self: flex-end;
 }
 
@@ -134,6 +134,8 @@
   letter-spacing: 0.5px;
   user-select: none;
   flex-shrink: 0;
+  align-self: flex-start; /* всегда прибита к верху текста */
+  margin-top: 2px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.35);
 }
 
@@ -144,10 +146,17 @@
   gap: 3px;
   min-width: 0;
   max-width: 100%;
-  /* FIX: аватарка остаётся прибита к верху даже при длинном сообщении */
-  align-self: stretch;
 }
-.chat-message-mine .chat-message-body { align-items: flex-end; }
+
+/* Чужое сообщение: контент выровнен влево */
+.chat-message:not(.chat-message-mine) .chat-message-body {
+  align-items: flex-start;
+}
+
+/* Своё сообщение: контент выровнен вправо */
+.chat-message-mine .chat-message-body {
+  align-items: flex-end;
+}
 
 /* ── ФИКС 1: Цветной никнейм ─────────────────────────────────── */
 .chat-username {
@@ -182,8 +191,7 @@
 
 .chat-time {
   font-size: 10px;
-  color: #ffffff;
-  font-weight: bold;
+  color: #888;
   padding: 0 2px;
 }
 
@@ -378,14 +386,4 @@
   letter-spacing: 0.3px;
   white-space: nowrap;
   /* цвет задаётся через JS */
-}
-
-/* Аватарка не съезжает при длинном сообщении */
-.chat-message {
-  align-items: flex-start !important;
-}
-.chat-avatar {
-  align-self: flex-start !important;
-  flex-shrink: 0 !important;
-  margin-top: 2px;
 }

@@ -21,20 +21,20 @@ if (loginForm) {
       if (response.ok && data.success) {
         showToast("Успешный вход!", "success");
         document.body.dataset.isauth = "true";
-        document.body.dataset.isregistered = "true"; // вошёл → зарегистрирован и авторизован
+        document.body.dataset.isregistered = "true";
         document.body.dataset.username = data.username;
         document.body.dataset.userid = data.userId;
 
-        // очистка формы логина
         loginForm.reset();
 
         updateUI();
         updateAuthUI();
         connectChat();
-
         await loadPosts();
-        
+
+        // после входа → на главную
         location.hash = "#home";
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         showToast("Ошибка входа: " + data.error, "error");
       }
@@ -71,17 +71,18 @@ if (registerForm) {
 
       if (response.ok && data.success) {
         showToast("Регистрация успешна! Теперь войдите.", "success");
-        document.body.dataset.isregistered = "true"; // зарегистрирован, но не вошёл
+        document.body.dataset.isregistered = "true";
         document.body.dataset.isauth = "false";
         document.body.dataset.username = "";
         document.body.dataset.userid = "";
 
-        // очистка формы регистрации
         registerForm.reset();
-        
         updateUI();
         updateAuthUI();
+
+        // ФИКС: после регистрации → на главную страницу
         location.hash = "#home";
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         showToast("Ошибка регистрации: " + data.error, "error");
       }
@@ -111,6 +112,7 @@ document.addEventListener("click", async function (e) {
       updateUI();
       updateAuthUI();
       location.hash = "#home";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.error("Ошибка выхода:", err);
       showToast("Ошибка соединения с сервером", "error");

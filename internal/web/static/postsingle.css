@@ -1,183 +1,228 @@
-/* Общий контейнер модалки */
+/* ================================================================
+   postsingle.css — страница одного поста
+   ================================================================ */
+
+/* Полноэкранная модалка с текстурой */
 #post-modal {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
   background: url('/static/parallaximg/textures/Copilot_paper_texture3.png') no-repeat center center;
   background-size: cover;
   display: none;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   z-index: 4000;
+  overflow-y: auto;
 }
 
-/* Внутренний блок поста */
+/* Внутренний контейнер — карточка по центру */
 .post-modal {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 2rem;
-  padding: 20px;
+  max-width: 860px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 80px 40px 60px;
   box-sizing: border-box;
+  font-family: "Cormorant Garamond", serif;
 }
 
-/* Шапка: кнопка + заголовок */
+/* Шапка: кнопка назад + заголовок */
 .post-modal-header {
   position: sticky;
   top: 0;
-  width: 100%;
-  text-align: center;
-  padding-bottom: 10px;
+  background: rgba(245,230,196,0.92);
+  backdrop-filter: blur(4px);
+  border-bottom: 2px solid #c9a84c;
+  padding: 12px 0 14px;
+  margin-bottom: 28px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 0 0 8px 8px;
 }
 
 .post-modal-header h3 {
   margin: 0;
-  font-size: 4em;
-  font-weight: 600;
-  color: #2a2a2a;
-  text-align: center;
+  flex: 1;
+  font-size: 1.8rem;       /* было 4em — уменьшаем */
+  font-weight: 700;
+  color: #2a1a08;
+  text-align: left;
+  line-height: 1.3;
+  word-break: break-word;
 }
 
 /* Кнопка назад */
 .modal-back-btn {
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  color: #4a6fa5;
+  flex-shrink: 0;
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  color: #f5e6c4;
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  padding: 6px 14px;
   cursor: pointer;
-  margin-bottom: 10px;
+  transition: background 0.2s;
+  white-space: nowrap;
 }
-
 .modal-back-btn:hover {
-  text-decoration: underline;
+  background: linear-gradient(#d4af37, #8b5a2b);
 }
 
-/* Контент поста с общим скроллом */
+/* Тело поста */
 .post-modal-body {
   flex: 1;
-  width: 95%;
-  max-width: 95%;
-  overflow-y: auto;   /* общий скролл */
-  padding: 20px 0;
-  margin: 0 auto;
+  width: 100%;
+  overflow-y: visible;
+  padding: 0;
   box-sizing: border-box;
-  text-align: left;
 }
 
-.post-modal-body p {
-  font-size: 2.5em;
-  line-height: 1.4;
-  margin-bottom: 1.5em;
-  color: #111;
-  text-align: left;
+/* Текст поста — уменьшен с 2.5em до нормального */
+.post-modal-body > p:first-child {
+  font-size: 1.05rem;      /* было 2.5em */
+  line-height: 1.7;
+  color: #1a1008;
+  margin-bottom: 1.2em;
+  text-align: justify;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 /* Метаданные */
 .post-modal .meta {
-  font-size: 1.4em;
-  color: #555;
-  margin-bottom: 2em;
-  text-align: left;
+  font-size: 0.9rem;       /* было 1.4em */
+  color: #6b4c2a;
+  margin-bottom: 1.6em;
   font-style: italic;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+  border-top: 1px dashed #c9a84c;
+  padding-top: 10px;
 }
 
-/* Комментарии */
-#comments {
-  width: 95%;
-  max-width: 95%;
-  border-top: 2px dashed #666;
-  padding-top: 1.5em;
-  margin: 0 auto;
-  text-align: left;
-}
-
-#comments p {
-  margin: 0.8em 0;
-  font-size: 1.4em;
-  line-height: 1.3;
-  color: #222;
-  background: none;
-  border: none;
-  padding: 0;
-  animation: fadeInInk 1.5s ease forwards;
-  opacity: 0;
-  font-family: "Cormorant Garamond", serif;
-  text-align: left;
-}
-
-#comments p b {
-  color: #4a6fa5;
+/* Кнопки голосования */
+.vote-btn {
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  color: #f5e6c4;
+  padding: 6px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
   margin-right: 6px;
 }
-
-/* Анимация проявления */
-@keyframes fadeInInk {
-  0% {
-    opacity: 0;
-    filter: blur(4px);
-    transform: translateY(10px);
-  }
-  50% {
-    opacity: 0.5;
-    filter: blur(2px);
-    transform: translateY(3px);
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0);
-    transform: translateY(0);
-  }
+.vote-btn:hover {
+  background: linear-gradient(#d4af37, #8b5a2b);
 }
 
 /* Форма комментариев */
 #comment-form {
-  margin-top: 1.5em;
+  margin-top: 2em;
   display: flex;
   flex-direction: column;
-  width: 95%;
-  max-width: 95%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  text-align: left;
+  gap: 10px;
 }
 
 #comment-form textarea {
   resize: vertical;
-  font-size: 1.2em;
-  min-height: 100px;
-  padding: 10px;
-  margin-bottom: 12px;
-  font-family: inherit;
-  border: 1px solid #ccc;
+  font-size: 0.95rem;      /* было 1.2em */
+  min-height: 90px;
+  padding: 10px 14px;
+  font-family: "Cormorant Garamond", serif;
+  border: 1px solid #c9a84c;
   border-radius: 6px;
+  background: rgba(255,248,220,0.85);
+  color: #1a1008;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#comment-form textarea:focus {
+  border-color: #8b5a2b;
 }
 
-#comment-form button {
+#comment-form button[type="submit"] {
   align-self: flex-start;
-  padding: 8px 16px;
-  background: #4a6fa5;
-  color: #fff;
-  border: none;
+  padding: 8px 20px;
+  background: linear-gradient(#8b5a2b, #5a3a1a);
+  border: 1px solid #d4af37;
   border-radius: 6px;
+  color: #f5e6c4;
+  font-family: "Cinzel", serif;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 1.1em;
+  transition: background 0.2s;
+}
+#comment-form button[type="submit"]:hover {
+  background: linear-gradient(#d4af37, #8b5a2b);
 }
 
-#comment-form button:hover {
-  background: #395a82;
+/* Секция комментариев */
+#comments {
+  width: 100%;
+  border-top: 2px dashed #c9a84c;
+  padding-top: 1.4em;
+  margin-top: 1em;
+}
+
+#comments p {
+  margin: 0.6em 0;
+  font-size: 0.95rem;      /* было 1.4em */
+  line-height: 1.6;
+  color: #1a1008;
+  padding: 10px 14px;
+  background: rgba(255,248,220,0.6);
+  border-radius: 6px;
+  border-left: 3px solid #c9a84c;
+  animation: fadeInInk 0.8s ease forwards;
+  opacity: 0;
+  word-break: break-word;
+}
+
+#comments p b {
+  color: #8b5a2b;
+  margin-right: 6px;
+}
+
+/* Анимация появления комментариев */
+@keyframes fadeInInk {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Голосование за комментарии */
+.comment-vote-btn {
+  background: none;
+  border: 1px solid #c9a84c;
+  border-radius: 4px;
+  color: #8b5a2b;
+  padding: 2px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-right: 4px;
+  margin-bottom: 8px;
+  transition: background 0.15s;
+}
+.comment-vote-btn:hover {
+  background: rgba(212,175,55,0.15);
 }
 
 /* Адаптация для мобильных */
 @media (max-width: 768px) {
-  .post-modal-body,
-  #comments,
-  #comment-form {
-    width: 100%;
-    max-width: 100%;
+  .post-modal {
+    padding: 70px 16px 40px;
+  }
+  .post-modal-header h3 {
+    font-size: 1.3rem;
   }
 }
